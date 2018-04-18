@@ -1,0 +1,50 @@
+# 13.1
+1.
+它们有很多地方相似的，线程实现容易些：只需要实现PCB中的子集TCB，不用关注PCB中的资源管理部分；
+2.
+PCB：proc_struct
+# 13.2
+- pid:线程ID
+- name:线程名字
+- state：处于什么状态，动态变化
+- runs：
+- need_resched：是否需要调度
+- flags：
+- kstack：内核堆栈
+- cr3：与页表相关
+- mm：内存空间管理
+- context：进程或线程的上下文
+- tf：与中断相关，保存前一个被打断进程或线程的状态
+- perent：父进程信息
+- list_link：线程控制块的链表
+- hash_link：基于hash值的链表，便于查找 </br>
+寄存器状态、堆栈、当前指令指针等信息是线程控制块的；</br>
+mm, vma等内存管理字段是进程控制块的；
+2.
+查看线程控制块中cr3是否一致；
+3.
+trapframe在中断响应时用到；context在线程切换时用到；
+4.
+在用户态中断响应时，要切换到内核态；而在内核态中断响应时，没有这种切换；</br>
+tf_esp, tf_ss字段
+5.
+tf_eip, tf_cs等由硬件保存；tf_esp, tf_ss等在用户态响应时由硬件保存；
+通用寄存器,段寄存器由软件保存；
+# 13.3
+1.
+tf.tf_eip = (uint32_t) kernel_thread_entry;
+/kern-ucore/arch/i386/init/entry.S
+/kern/process/entry.S
+2.
+setup_stack  </br>
+tf和context中的esp
+3.
+4.
+5.
+6.
+7.
+proc->context.eip = forkret;
+</br>
+tf.tf_eip = (uint32_t) kernel_thread_entry;
+8.
+
