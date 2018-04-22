@@ -1,0 +1,70 @@
+# [14.1]
+1.
+用户态代码段的初始化
+2.
+3.
+# [14.2]
+1.
+~~~
+memlayout.h
+#define VPT 0xFAC00000
+#define KSTACKPAGE 2 // # of pages in kernel stack
+#define KSTACKSIZE (KSTACKPAGE * PGSIZE) // sizeof kernel stack
+#define USERTOP 0xB0000000
+#define USTACKTOP USERTOP
+#define USTACKPAGE 256 // # of pages in user stack
+#define USTACKSIZE (USTACKPAGE * PGSIZE) // sizeof user stack
+~~~
+2.
+3.
+4.
+# [14.3]
+1.
+- 清空进程地址空间是在initproc所在进程地址空间。
+- CR3设置成新建好的页表地址后，开始使用新的地址空间
+2.
+mm = mm_create()
+setup_pgdir(mm)
+3.
+# [14.4]
+1.
+- 相应线程的内核栈创建时，多了SS和ESP的设置；
+- 用户进程需要创建用户地址空间，并把用户代码复制到用户地址空间；
+2.
+# [14.5]
+1.
+内核栈在进程的内核地址空间，而各进程的内核地址空间是共享的；
+2.
+dofork()函数</br>
+父进程的内存，
+父进程的trapframe
+
+3.
+- 内核栈
+- 页表
+- trapframe & context
+- PCB字段修改
+4.
+# [14.6]
+1.
+只有进程空间的各段的内容要发生变化时，才将父进程的内容复制一份给子进程
+2.
+产生页异常时
+共享地址空间:可读可写。</br>
+写时复制:写时产生异常
+3.
+页共享，页换入换出时出错
+
+
+
+
+
+
+
+
+
+
+
+
+
+
